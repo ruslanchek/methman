@@ -11,9 +11,11 @@ Posts.deny({
     return (_.without(fieldNames, 'url', 'title').length > 0);
   }
 });
+
 Meteor.methods({
     postInsert: function(postAttributes) {
         check(this.userId, String);
+
         check(postAttributes, {
             title: String,
             url: String
@@ -44,3 +46,5 @@ Meteor.methods({
         };
     }
 });
+
+
