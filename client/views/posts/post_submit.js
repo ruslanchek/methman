@@ -4,24 +4,21 @@ Template.postSubmit.events({
 
         var post = {
             url: $(e.target).find('[name=url]').val(),
-            title: $(e.target).find('[name=title]').val(),
-            message: $(e.target).find('[name=message]').val()
-        }
+            title: $(e.target).find('[name=title]').val()
+        };
 
-        Meteor.call('post', post, function(error, id) {
-            if (error) {
-                // показываем ошибку пользователю
-                throwError(error.reason);
+        Meteor.call('postInsert', post, function(error, result) {
+            // display the error to the user and abort
+            if (error)
+                return alert(error.reason);
 
-                if (error.error === 302)
-                    Router.go('postPage', {
-                        _id: error.details
-                    })
-            } else {
-                Router.go('postPage', {
-                    _id: id
-                });
-            }
+            // show this result but route anyway
+            if (result.postExists)
+                alert('This link has already been posted');
+
+            Router.go('postPage', {
+                _id: result._id
+            });
         });
     }
 });
